@@ -17,7 +17,7 @@ export const SignupPage: React.FC = () => {
         if (user.role === 'admin') {
           navigate('/admin');
         } else {
-          navigate('/cart');
+          navigate('/');
         }
       }
     }
