@@ -11,9 +11,13 @@ export const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email && password) {
-      const success = await login(email, password);
-      if (success) {
-        navigate('/cart');
+      const user = await login(email, password);
+      if (user) {
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/cart');
+        }
       }
     }
   };

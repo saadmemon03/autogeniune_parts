@@ -12,8 +12,14 @@ export const SignupPage: React.FC = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name && email && password) {
-      await signup(name, email, password);
-      navigate('/cart');
+      const user = await signup(name, email, password);
+      if (user) {
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/cart');
+        }
+      }
     }
   };
 

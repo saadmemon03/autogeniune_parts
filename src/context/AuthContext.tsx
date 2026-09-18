@@ -8,8 +8,8 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password?: string) => Promise<boolean>;
-  signup: (name: string, email: string, password?: string) => Promise<boolean>;
+  login: (email: string, password?: string) => Promise<any>;
+  signup: (name: string, email: string, password?: string) => Promise<any>;
   logout: () => void;
 }
 
@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const login = async (email: string, password?: string): Promise<boolean> => {
+  const login = async (email: string, password?: string): Promise<any> => {
     try {
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
@@ -37,14 +37,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(data.user);
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token); 
-      return true;
+      if (data.user.role === 'admin') {
+        localStorage.setItem('adminToken', data.token);
+      }
+      return data.user;
     } catch (err: any) {
       alert(err.message);
-      return false;
+      return null;
     }
   };
 
-  const signup = async (name: string, email: string, password?: string): Promise<boolean> => {
+  const signup = async (name: string, email: string, password?: string): Promise<any> => {
     try {
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
@@ -59,10 +62,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(data.user);
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
-      return true;
+      if (data.user.role === 'admin') {
+        localStorage.setItem('adminToken', data.token);
+      }
+      return data.user;
     } catch (err: any) {
       alert(err.message);
-      return false;
+      return null;
     }
   };
 
