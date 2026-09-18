@@ -96,7 +96,7 @@ export const ShopByVehiclePage: React.FC = () => {
                   {filteredModels.map((model) => (
                     <Link 
                       key={model.name}
-                      to="/category"
+                      to={`/vehicle/${make.name}/${model.name}`}
                       className="bg-white p-6 border border-neutral-100 shadow-sm hover:border-primary-300 hover:shadow-md transition-all group rounded-sm flex flex-col justify-between"
                     >
                       <div>

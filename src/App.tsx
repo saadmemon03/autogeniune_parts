@@ -15,6 +15,7 @@ import { ContactPage } from './pages/ContactPage';
 import { FAQPage } from './pages/FAQPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
+import { VehicleProductsPage } from './pages/VehicleProductsPage';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="detailed-return-policy" element={<DetailedReturnPolicyPage />} />
               <Route path="track-order" element={<TrackOrderPage />} />
               <Route path="shop-by-vehicle" element={<ShopByVehiclePage />} />
+              <Route path="vehicle/:make/:model" element={<VehicleProductsPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="signup" element={<SignupPage />} />
               <Route path="about" element={<AboutUsPage />} />
