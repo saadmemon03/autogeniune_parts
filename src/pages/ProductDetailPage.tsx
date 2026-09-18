@@ -69,7 +69,7 @@ export const ProductDetailPage: React.FC = () => {
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 h-64 md:h-auto bg-gray-100 flex items-center justify-center p-8">
             {product.image_url ? (
-              <img src={product.image_url} alt={product.title} className="max-w-full max-h-100 object-contain drop-shadow-md rounded" />
+              <img src={product.image_url.startsWith("http") ? product.image_url : `http://localhost:5000${product.image_url}`} alt={product.title} className="max-w-full max-h-100 object-contain drop-shadow-md rounded" />
             ) : (
               <div className="text-gray-400 font-medium text-lg">No Image Available</div>
             )}

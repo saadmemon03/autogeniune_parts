@@ -95,7 +95,7 @@ export const CartPage: React.FC = () => {
                   <li key={item.id} className="p-4 sm:p-6 flex items-center gap-4">
                     <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
                       {item.image ? (
-                        <img src={`http://localhost:5000${item.image}`} alt={item.title} className="w-full h-full object-cover" />
+                        <img src={item.image.startsWith("http") ? item.image : `http://localhost:5000${item.image}`} alt={item.title} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">No Image</div>
                       )}

@@ -165,7 +165,7 @@ export const CategoryPage: React.FC = () => {
               >
                 <div className="h-48 bg-gray-200">
                   {product.image_url ? (
-                    <img src={`http://localhost:5000${product.image_url}`} alt={product.title} className="w-full h-full object-cover" />
+                    <img src={product.image_url.startsWith("http") ? product.image_url : `http://localhost:5000${product.image_url}`} alt={product.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
                   )}
