@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PackagePlus, ShoppingBag, LogOut, PackageSearch, Filter } from 'lucide-react';
+import { PackagePlus, ShoppingBag, LogOut, PackageSearch, Filter, Menu, X } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
@@ -235,29 +236,37 @@ export const AdminDashboardPage: React.FC = () => {
   if (!isAdminLoggedIn) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
+    <div className="min-h-screen bg-gray-50 flex font-sans relative overflow-hidden">
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-20 md:hidden" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
+      <aside className={`w-64 bg-white border-r border-gray-200 flex flex-col fixed md:relative z-30 h-full transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-xl font-black text-gray-900 tracking-tight">Admin <span className="text-primary-500">Panel</span></h2>
+          <button className="md:hidden text-gray-500 hover:text-gray-900" onClick={() => setIsMobileMenuOpen(false)}>
+            <X className="h-5 w-5" />
+          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           
-<button 
-            onClick={() => { setActiveTab('products'); setEditingProductId(null); setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' }); }}
+          <button 
+            onClick={() => { setActiveTab('products'); setEditingProductId(null); setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' }); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'products' ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-gray-50'}`}
           >
             <PackageSearch className="h-5 w-5" /> All Products
           </button>
           
           <button 
-            onClick={() => setActiveTab('categories')}
+            onClick={() => { setActiveTab('categories'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'categories' ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-gray-50'}`}
           >
             <Filter className="h-5 w-5" /> Categories
           </button>
           <button 
-            onClick={() => setActiveTab('orders')}
+            onClick={() => { setActiveTab('orders'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'orders' ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-gray-50'}`}
           >
             <ShoppingBag className="h-5 w-5" /> Orders
@@ -271,17 +280,22 @@ export const AdminDashboardPage: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <header className="bg-white border-b border-gray-200 py-4 px-8 flex justify-between items-center sticky top-0 z-10">
-          <h1 className="text-2xl font-bold text-gray-900 capitalize">
-            {activeTab.replace('-', ' ')}
-          </h1>
+      <main className="flex-1 h-screen overflow-y-auto">
+        <header className="bg-white border-b border-gray-200 py-4 px-4 sm:px-8 flex justify-between items-center sticky top-0 z-10">
+          <div className="flex items-center gap-3">
+            <button className="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none" onClick={() => setIsMobileMenuOpen(true)}>
+              <Menu className="h-6 w-6" />
+            </button>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 capitalize">
+              {activeTab.replace('-', ' ')}
+            </h1>
+          </div>
           {activeTab === 'products' && (
             <button 
               onClick={() => setActiveTab('add-product')}
-              className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors shadow-sm"
+              className="bg-primary-500 hover:bg-primary-600 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors shadow-sm"
             >
-              <PackagePlus className="h-4 w-4" /> Add Product
+              <PackagePlus className="h-4 w-4" /> <span className="hidden sm:inline">Add Product</span>
             </button>
           )}
         </header>
@@ -457,7 +471,8 @@ export const AdminDashboardPage: React.FC = () => {
               <div className="p-4 border-b border-gray-200 bg-gray-50">
                 <h3 className="font-semibold text-gray-900">Recent Orders</h3>
               </div>
-              <table className="min-w-full text-left border-collapse">
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-gray-200 bg-white">
                     <th className="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date / Items</th>
@@ -493,6 +508,7 @@ export const AdminDashboardPage: React.FC = () => {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
         </div>
