@@ -36,6 +36,7 @@ export const AdminDashboardPage: React.FC = () => {
     title: '', fit: '', price: '', type: 'OEM', category: '', description: '', quantity: '', demo_video_url: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [message, setMessage] = useState('');
 
   // Fetch Data
@@ -121,7 +122,16 @@ export const AdminDashboardPage: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImageFile(null);
+      setImagePreview(null);
     }
   };
 
@@ -154,6 +164,7 @@ export const AdminDashboardPage: React.FC = () => {
       setMessage(editingProductId ? '✅ Product updated successfully!' : '✅ Product added successfully!'); setEditingProductId(null);
       setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' });
       setImageFile(null);
+      setImagePreview(null);
       
       // Reset file input UI manually if needed, but since it remounts or we can just leave it for now
       setTimeout(() => {
@@ -253,7 +264,7 @@ export const AdminDashboardPage: React.FC = () => {
         <nav className="flex-1 p-4 space-y-1">
           
           <button 
-            onClick={() => { setActiveTab('products'); setEditingProductId(null); setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' }); setIsMobileMenuOpen(false); }}
+            onClick={() => { setActiveTab('products'); setEditingProductId(null); setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' }); setImagePreview(null); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'products' ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-gray-50'}`}
           >
             <PackageSearch className="h-5 w-5" /> All Products
@@ -376,6 +387,7 @@ export const AdminDashboardPage: React.FC = () => {
                                   title: p.title, fit: p.fit || '', price: p.price, type: p.type || 'OEM', category: p.category, description: p.description, quantity: p.quantity || '', demo_video_url: p.demo_video_url || ''
                                 });
                                 setImageFile(null);
+                                setImagePreview(p.image_url ? (p.image_url.startsWith("http") ? p.image_url : `http://localhost:5000${p.image_url}`) : null);
                                 setActiveTab('add-product');
                               }}
                               className="text-blue-500 hover:text-blue-700 text-sm font-semibold transition-colors mr-4"
@@ -450,6 +462,11 @@ export const AdminDashboardPage: React.FC = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Image</label>
                     <input type="file" name="image" accept="image/*" onChange={handleFileChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white" />
+                    {imagePreview && (
+                      <div className="mt-4 h-32 w-32 rounded-lg border border-gray-200 overflow-hidden bg-gray-50">
+                        <img src={imagePreview} alt="Preview" className="h-full w-full object-cover" />
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
@@ -457,7 +474,7 @@ export const AdminDashboardPage: React.FC = () => {
                   </div>
                   {message && <div className={`p-4 font-bold text-sm rounded-lg ${message.includes('Error') ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>{message}</div>}
                   <div className="flex gap-4">
-                    <button type="button" onClick={() => setActiveTab('products')} className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button type="button" onClick={() => { setActiveTab('products'); setImagePreview(null); }} className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
                     <button type="submit" className="flex-1 bg-primary-500 text-white font-semibold py-3 rounded-lg hover:bg-primary-600 transition-colors">{editingProductId ? 'Update Product' : 'Save Product'}</button>
                   </div>
                 </form>
