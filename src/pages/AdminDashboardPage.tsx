@@ -28,8 +28,6 @@ export const AdminDashboardPage: React.FC = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   
-  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
-  const [editCategoryName, setEditCategoryName] = useState('');
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
   // Form State
@@ -214,31 +212,6 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
 
-  const handleUpdateCategory = async (e: React.FormEvent, id: string) => {
-    e.preventDefault();
-    if (!editCategoryName.trim()) return;
-    try {
-      const response = await fetch(`http://localhost:5000/api/categories/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('adminToken')}`
-        },
-        body: JSON.stringify({ name: editCategoryName.trim() })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const updatedCat = data.category || data;
-        setCategories(categories.map(c => c._id === id ? updatedCat : c));
-        setEditingCategoryId(null);
-      } else {
-        alert('Failed to update category.');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleDeleteCategory = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
     try {
@@ -270,19 +243,6 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
         <nav className="flex-1 p-4 space-y-1">
           
-                            <button 
-                              onClick={() => {
-                                setEditingProductId(p._id);
-                                setFormData({
-                                  title: p.title, fit: p.fit || '', price: p.price, type: p.type || 'OEM', category: p.category, description: p.description, quantity: p.quantity || '', demo_video_url: p.demo_video_url || ''
-                                });
-                                setImageFile(null);
-                                setActiveTab('add-product');
-                              }}
-                              className="text-blue-500 hover:text-blue-700 text-sm font-semibold transition-colors mr-4"
-                            >
-                              Edit
-                            </button>
 <button 
             onClick={() => { setActiveTab('products'); setEditingProductId(null); setFormData({ title: '', fit: '', price: '', type: 'OEM', category: 'Brakes', description: '', quantity: '', demo_video_url: '' }); }}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${activeTab === 'products' ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-gray-50'}`}
@@ -395,6 +355,19 @@ export const AdminDashboardPage: React.FC = () => {
                             </span>
                           </td>
                           <td className="py-4 px-6 text-right">
+                            <button 
+                              onClick={() => {
+                                setEditingProductId(p._id);
+                                setFormData({
+                                  title: p.title, fit: p.fit || '', price: p.price, type: p.type || 'OEM', category: p.category, description: p.description, quantity: p.quantity || '', demo_video_url: p.demo_video_url || ''
+                                });
+                                setImageFile(null);
+                                setActiveTab('add-product');
+                              }}
+                              className="text-blue-500 hover:text-blue-700 text-sm font-semibold transition-colors mr-4"
+                            >
+                              Edit
+                            </button>
                             <button 
                               onClick={() => handleDeleteProduct(p._id)}
                               className="text-red-500 hover:text-red-700 text-sm font-semibold transition-colors"
