@@ -1,0 +1,97 @@
+@theme {
+  /* ============================
+     PRIMARY (Orange) — full scale
+     Base: #F3821D
+  ============================ */
+  --color-primary-50:  #FFF7F0;
+  --color-primary-100: #FFF2E8; /* your given light shade */
+  --color-primary-200: #FFE0C7;
+  --color-primary-300: #FFC896;
+  --color-primary-400: #F9A355;
+  --color-primary-500: #F3821D; /* BASE — your main color */
+  --color-primary-600: #D96B0F;
+  --color-primary-700: #B3550A;
+  --color-primary-800: #8C4108;
+  --color-primary-900: #663006;
+
+  /* Shortcut aliases (backward compatible with your old vars) */
+  --color-primary:      var(--color-primary-500);
+  --color-primary-dark: var(--color-primary-700);
+  --color-primary-light: var(--color-primary-100);
+
+  /* ============================
+     NEUTRAL / TEXT SCALE
+     Sampled directly from the live UI (borders, muted text, dark bg)
+     so it matches pixel-for-pixel instead of a guessed warm ramp.
+  ============================ */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F5F1EE;
+  --color-neutral-100: #ECE6E2;
+  --color-neutral-200: #E6E1DE; /* sampled: dropdown / input border */
+  --color-neutral-300: #D1CBC7;
+  --color-neutral-400: #A8A29C;
+  --color-neutral-500: #8B8784; /* sampled: dropdown chevron / label icon tone */
+  --color-neutral-600: #57514D; /* sampled: muted body copy */
+  --color-neutral-700: #3A332F;
+  --color-neutral-800: #241D1A;
+  --color-neutral-900: #160D07; /* sampled: header bar / hero bg / dark buttons */
+
+  /* Cream is a distinct surface color in this design (secondary nav strip,
+     card accents) — kept separate from the neutral text/border ramp. */
+  --color-cream: #FFF2E8; /* sampled: secondary nav bar background */
+
+  /* ============================
+     SEMANTIC / SURFACE TOKENS
+  ============================ */
+  --color-secondary: var(--color-neutral-900);
+
+  --color-background: var(--color-neutral-0);
+  --color-surface:    var(--color-neutral-0);
+  --color-surface-alt: var(--color-cream); /* secondary nav / cream sections */
+
+  --color-text-primary:   var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-500);
+  --color-text-inverse:   var(--color-neutral-0);
+  --color-text-on-primary: var(--color-neutral-0);
+
+  --color-border:       var(--color-neutral-200);
+  --color-border-strong: var(--color-neutral-300);
+
+  /* ============================
+     STATUS COLORS
+  ============================ */
+  --color-success:       #16a34a;
+  --color-success-light: #dcfce7;
+  --color-warning:       #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-danger:        #dc2626;
+  --color-danger-light:  #fee2e2;
+  --color-info:          #2563eb;
+  --color-info-light:    #dbeafe;
+
+  /* ============================
+     INTERACTIVE STATES
+  ============================ */
+  --color-primary-hover:  var(--color-primary-600);
+  --color-primary-active: var(--color-primary-700);
+  --color-focus-ring:     var(--color-primary-400);
+  --color-disabled:       var(--color-neutral-200);
+  --color-disabled-text:  var(--color-neutral-400);
+}
+
+/* ============================
+   DARK MODE (optional — auto)
+============================ */
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: var(--color-neutral-900);
+    --color-surface:    var(--color-neutral-800);
+    --color-surface-alt: var(--color-neutral-700);
+
+    --color-text-primary:   var(--color-neutral-0);
+    --color-text-secondary: var(--color-neutral-300);
+
+    --color-border:        var(--color-neutral-700);
+    --color-border-strong: var(--color-neutral-600);
+  }
+}

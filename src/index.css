@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "../src/style/theme.css";
+@theme {
+  
+  --font-sans: "Bai Jamjuree", system-ui, sans-serif;
+  --font-heading: "Bai Jamjuree", system-ui, sans-serif;
+}
+
+/* Custom base styles or utilities can be added here */
+html, body {
+  @apply bg-white text-gray-900;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6, .font-black {
+  font-family: var(--font-heading);
+}
